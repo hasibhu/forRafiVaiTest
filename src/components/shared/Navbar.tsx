@@ -92,6 +92,15 @@ const Navbar = ({ session }: { session: UserProps | null }) => {
               // onClick={()=>signOut()}
               onClick={() => {
                 localStorage.removeItem("accessToken");  // Remove accessToken
+
+                const date= new Date();
+
+                date.setTime(date.getTime() + (0 * 24 *60*60*1000))
+                const expires = `expires=${date.toUTCString()}`
+                document.cookie = `token= ; ${expires}; path=/`
+                if(!document.cookie){
+                  router.push("/")
+                }
                 signOut({ redirect: false }).then(() => {  // Sign out without redirect
                   router.push('/');  // Redirect to home page
                 });
