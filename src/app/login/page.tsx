@@ -20,7 +20,12 @@ const LoginPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>();
-
+  function setCookie(name: string, value: string, days: number) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Days to milliseconds
+    const expires = `expires=${date.toUTCString()}`;
+    document.cookie = `${name}=${value}; ${expires}; path=/`;
+  }
   const onSubmit = async (data: FormValues) => {
     console.log(data);
     try {
@@ -31,7 +36,7 @@ const LoginPage = () => {
         router.push('/dashboard')
         // set access token to the local storage
         localStorage.setItem('accessToken', res.accessToken)
-
+        setCookie('token', res.accessToken, 7);
         
       } else {
         alert('Not registered')
